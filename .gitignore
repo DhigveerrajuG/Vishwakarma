@@ -1,0 +1,27 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Contact Form Submissions & Dynamic Runtime Data
+data/*.json
+data/contacts.json
+data/resume_requests.json
+!data/.gitkeep
+
+# Java Compiled Binaries
+backend-java/bin/
+*.class
+
+# TypeScript Build Output
+dist/
+
+# IDE & Editor Settings
+.vscode/
+
+# Environment & OS
+.env
+.DS_Store
+Thumbs.db

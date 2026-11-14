@@ -1,0 +1,38 @@
+{
+  "name": "vishwakarma",
+  "version": "1.0.0",
+  "description": "Vishwakarma — Robotics & Artificial Intelligence Engineering Portfolio of Dhigveerraju G",
+  "main": "index.html",
+  "homepage": "https://dhigveerrajug.github.io/Vishwakarma/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DhigveerrajuG/Vishwakarma.git"
+  },
+  "scripts": {
+    "build:ts": "tsc",
+    "build:java": "node scripts/build-java.js",
+    "build": "tsc",
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "server:java": "node scripts/start-java.js"
+  },
+  "keywords": [
+    "robotics",
+    "artificial-intelligence",
+    "computer-vision",
+    "yolov8",
+    "opencv",
+    "arduino",
+    "embedded-systems",
+    "physical-intelligence",
+    "portfolio",
+    "typescript",
+    "java"
+  ],
+  "author": "Dhigveerraju G",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}
