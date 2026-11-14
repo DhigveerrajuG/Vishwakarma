@@ -1,95 +1,90 @@
 # ⚙️ Vishwakarma — Robotics & Artificial Intelligence Engineering Portfolio
 
-[![Live Site](https://img.shields.io/badge/Live-GitHub%20Pages-2563eb?style=flat&logo=github)](https://dhigveerrajug.github.io/Vishwakarma/)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-emerald?style=flat&logo=tag)](https://github.com/DhigveerrajuG/Vishwakarma/releases)
-[![Author](https://img.shields.io/badge/Author-Dhigveerraju%20G-slate)](https://github.com/DhigveerrajuG)
+[![Live Site](https://img.shields.io/badge/Live%20Portfolio-GitHub%20Pages-2563eb?style=for-the-badge&logo=github)](https://dhigveerrajug.github.io/Vishwakarma/)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-10b981?style=for-the-badge&logo=tag)](https://github.com/DhigveerrajuG/Vishwakarma/releases/tag/v1.0.0)
+[![Author](https://img.shields.io/badge/Author-Dhigveerraju%20G-slate?style=for-the-badge)](https://github.com/DhigveerrajuG)
 
 > **Vishwakarma**: The divine architect of physical intelligence — a high-performance modern engineering portfolio showcasing cyber-physical systems, edge computer vision with lightweight YOLOv8, embedded Arduino/C++ PWM motor actuation, and TETRIX PRIZM kinematics.
 
----
-
-## ⚡ Architecture & Tech Stack
-
-- **Frontend Structure**: Semantic HTML5 with ARIA accessibility, responsive CSS Grid & Flexbox, light/dark themes.
-- **Frontend Logic & Animations**: Modular **TypeScript** (`src/`) compiled to ES2022 modules (`dist/`) featuring:
-  - **RoboGuide AI Companion**: Stationary levitating drone with on-load auto-greeting toast, auto-minimize, interactive Q&A chat box, typing indicator, and suggestion chips.
-  - **30-Second Guided Tour Mode**: Automated smooth-scroll walkthrough guiding visitors through Dhigveer's engineering profile, flagship builds, technical matrix, and contact channels.
-  - **AI Voice Speech Synthesis (Web Speech API)**: Toggleable robotic voice narration with natural English cadence.
-  - **Protected Resume / CV (Authorization Required)**: Access-protected printable resume sheet (`assets/resume.html`) with owner approval workflow and passcode authorization.
-  - **Scroll Reveal & Micro-Interactions**: Smooth entrance animations, active navigation scroll-spy, and Web Audio API synthesized electronic chirps.
-  - **Project Architecture Modals**: High-throughput YOLOv8 vision pipeline, PWM soft-start acceleration profiles, and closed-loop optical encoder specs.
-- **Connected Backend**: Dual-ready API servers supporting:
-  - **Java 26 Backend** (`backend-java/`): Zero-external-dependency HTTP server utilizing Java's `com.sun.net.httpserver.HttpServer` with Virtual Threads.
-  - **Node.js Backend** (`server/server.js`): Fast, zero-dependency REST API server.
-  - **REST API Endpoints**:
-    - `POST /api/contact` — Validates and stores contact form transmissions in `data/contacts.json`.
-    - `POST /api/resume-request` — Records resume access requests for owner review in `data/resume_requests.json`.
-    - `POST /api/admin/data` — Owner dashboard data feed (passcode protected).
-    - `POST /api/admin/approve` — One-click resume access request authorization.
-    - `POST /api/chat` — Natural language query processor for RoboGuide.
-    - `GET /api/projects` — Real-time project telemetry metrics.
-    - `GET /api/health` — System health check for deployment platforms.
-- **Offline / Static Resilient**: Full client-side fallback ensures all features (chat, modals, feedback) work seamlessly even on static hosts like GitHub Pages.
+👉 **[Launch Live Interactive Portfolio →](https://dhigveerrajug.github.io/Vishwakarma/)**
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## 👨‍💻 About Dhigveerraju G
 
-### 1. Run with Node.js
-```bash
-# Install dependencies (TypeScript compiler & types)
-pnpm install  # or npm install
+I design and build intelligent machines where algorithms directly govern mechanical torque, edge computer vision, and physical actuation. My work bridges **embedded microcontroller firmware, real-time sensor telemetry, and edge deep learning** into dependable cyber-physical systems.
 
-# Build TypeScript
-pnpm run build
-
-# Start the Node.js server
-pnpm start    # or npm start
-# Server live on: http://localhost:8080
-```
-
-### 2. Run with Java 26
-```bash
-# Compile Java server
-pnpm run build:java
-
-# Run Java server
-pnpm run server:java
-# Server live on: http://localhost:8080
-```
-
-### 3. Direct Browser Preview
-You can also directly double-click `index.html` to open it in Chrome, Edge, or Firefox.
+- 📍 **Location**: India 🇮🇳 (Open to On-site & Remote roles)
+- 💼 **LinkedIn**: [linkedin.com/in/dhigveerraju-g-69737036b](https://in.linkedin.com/in/dhigveerraju-g-69737036b)
+- 🐙 **GitHub**: [@DhigveerrajuG](https://github.com/DhigveerrajuG)
+- 🌐 **Live Portfolio**: [dhigveerrajug.github.io/Vishwakarma](https://dhigveerrajug.github.io/Vishwakarma/)
 
 ---
 
-## 📦 How to Publish
+## 🛡️ Flagship Engineering Projects
 
-### Option A: GitHub Pages (Free Static Hosting)
-1. Push this repository to GitHub under `DhigveerrajuG/dhigveerraju-portfolio`.
-2. Go to **Settings** → **Pages**.
-3. Under **Build and deployment**, select **Source: Deploy from a branch** (Branch: `main`, folder: `/root`).
-4. Click **Save**. Your portfolio will be live at `https://dhigveerrajug.github.io/dhigveerraju-portfolio/`!
+### 1. Conveyor Sentinel AI — Autonomous Industrial Belt Inspection System
+*Real-time edge computer vision pipeline detecting tears, punctures, and surface anomalies on moving conveyor lines.*
+- **Performance**: 42+ FPS real-time anomaly classification on edge hardware.
+- **Vision Pipeline**: Ultralytics YOLOv8 object detection paired with OpenCV morphological contour tracking for blur mitigation.
+- **Safety Interlock**: Automated 5-point safety routine triggering industrial relay shutoff in `<22ms`.
+- **Repository**: [Autonomous-Industrial-Conveyor-Belt-Inspection-System](https://github.com/DhigveerrajuG/Autonomous-Industrial-Conveyor-Belt-Inspection-System)
 
-### Option B: Vercel / Netlify (One-Click)
-1. Import the repository into [Vercel](https://vercel.com) or [Netlify](https://netlify.com).
-2. Set Build Command: `pnpm run build` (or `npm run build`).
-3. Set Output Directory: `.` (root).
-4. Click **Deploy**.
+### 2. Synchronized Dual-Motor Actuation & PWM Firmware
+*Embedded C++ firmware executing mathematical PWM acceleration ramping for dual DC motors.*
+- **Microcontroller**: Arduino UNO / ATMega328P with L298N H-Bridge dual motor driver.
+- **Motor Control**: Custom S-curve acceleration & deceleration algorithms preventing current surges and mechanical backlash.
+- **Closed-Loop Feedback**: Optical encoder tachometer integration monitoring real-time RPM under dynamic mechanical load.
 
-### Option C: Render / Railway / Docker (Full-Stack Backend)
-1. Deploy using the included `Dockerfile` or connect your GitHub repository to [Render](https://render.com) as a **Web Service**.
-2. Build Command: `pnpm install && pnpm run build`
-3. Start Command: `npm start`
-4. Set Port: `8080`
+### 3. Edge Vision Telemetry & Diagnostics Reticle HUD
+*Interactive canvas overlay rendering live coordinates, defect bounding boxes, and serial telemetry.*
+- **Telemetry Stream**: Simulated UART serial data link synchronizing camera coordinates with motor speeds.
+- **Diagnostics Reticle**: Sub-millimeter bounding box coordinates with dynamic confidence percentage indicators.
+- **Audio Feedback**: Web Audio API synthesized electronic tones indicating defect criticality.
+
+### 4. Robotics Kinematics & Actuation Lab
+*Precision motion control and kinematics on high-torque 12V DC actuators.*
+- **Platform**: TETRIX PRIZM robotics controller with closed-loop quadrature optical encoders.
+- **Kinematics**: Calibrated PID position control ensuring sub-millimeter positional repeatability.
 
 ---
 
-## 🛡️ Projects Featured
-1. **Conveyor Sentinel AI**: Autonomous Industrial Conveyor Belt Inspection System combining YOLOv8 and OpenCV at 42+ FPS.
-2. **Synchronized Dual-Motor Actuation**: C++ firmware on Arduino with mathematical PWM acceleration ramping.
-3. **Edge Vision Telemetry & Diagnostics HUD**: Dynamic coordinate bounding boxes and UART serial link.
-4. **Robotics Kinematics & Actuation Lab**: TETRIX PRIZM closed-loop motor control with quadrature optical encoders.
+## ⚡ Technical Arsenal
+
+| Category | Technologies & Tools |
+| :--- | :--- |
+| **Robotics & Embedded Systems** | C++, Arduino UNO, TETRIX PRIZM, PWM Motor Control, L298N H-Bridge, PID Control, Optical Encoders, UART / I2C / SPI |
+| **Computer Vision & Edge AI** | Python, Ultralytics YOLOv8, OpenCV, Image Segmentation, Morphological Filtering, Edge TPU / NVIDIA Jetson Inference |
+| **Software & Web Engineering** | TypeScript, JavaScript (ES2022), Java 26 (Virtual Threads), Node.js, HTML5 Canvas API, Web Audio API, Web Speech API |
+| **Development & Deployment** | Git, GitHub Pages, Linux, Docker, VS Code, RESTful APIs |
+
+---
+
+## 🤖 RoboGuide AI Companion
+
+The portfolio features **RoboGuide**, an embedded interactive AI companion:
+- **Stationary Corner Companion**: Stays docked neatly in the corner with upward speech bubbles.
+- **30-Second Guided Tour**: Automated smooth-scroll walkthrough covering engineering background, flagship builds, technical matrix, and contact channels.
+- **Interactive Q&A**: Answers recruiter and visitor inquiries on robotics architectures, code snippets, and skills.
+- **Robotic Voice Synthesis**: Optional natural English speech narration via the Web Speech API.
+
+---
+
+## 📄 Official Resume Access
+
+To protect proprietary firmware and engineering IP, official resume downloads (`assets/resume.html`) are access-protected:
+- **Request Access**: Visitors can submit a request directly through the on-page form.
+- **Instant Unlock**: Authorized recruiters and collaborators can enter their authorization token (or use their approved link) to view and print the resume immediately.
+
+---
+
+## 📬 Contact & Collaboration
+
+Open for robotics engineering roles, edge computer vision research collaborations, and hardware automation projects.
+
+- **LinkedIn**: [Dhigveerraju G](https://in.linkedin.com/in/dhigveerraju-g-69737036b)
+- **GitHub**: [github.com/DhigveerrajuG](https://github.com/DhigveerrajuG)
+- **Portfolio**: [dhigveerrajug.github.io/Vishwakarma](https://dhigveerrajug.github.io/Vishwakarma/)
 
 ---
 

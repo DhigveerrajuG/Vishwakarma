@@ -66,16 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const soundBtn = document.getElementById('btn-bot-sound');
-    if (soundBtn) {
-        soundBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
-            soundBtn.textContent = isMuted ? '🔇' : '🔊';
-            soundBtn.title = isMuted ? 'Sound Muted' : 'Sound Enabled';
-            if (!isMuted) playBotChirp(600);
-        });
-    }
-
     /* ----------------------------------------------------------------------
        3. Typewriter Effect
        ---------------------------------------------------------------------- */
@@ -137,30 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ----------------------------------------------------------------------
-       5. Projects Filtering & GitHub Repositories Drawer
+       5. Projects Filtering
        ---------------------------------------------------------------------- */
     const filterBtns = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
-    const moreReposDrawer = document.getElementById('more-repos-drawer');
-    const btnToggleMoreRepos = document.getElementById('btn-toggle-more-repos');
-    const toggleMoreReposText = document.getElementById('toggle-more-repos-text');
-
-    if (btnToggleMoreRepos && moreReposDrawer) {
-        btnToggleMoreRepos.addEventListener('click', () => {
-            const isExpanded = moreReposDrawer.classList.contains('expanded');
-            if (isExpanded) {
-                moreReposDrawer.classList.remove('expanded');
-                btnToggleMoreRepos.setAttribute('aria-expanded', 'false');
-                if (toggleMoreReposText) toggleMoreReposText.textContent = 'Explore More GitHub Repositories (2) ↓';
-                playBotChirp(380);
-            } else {
-                moreReposDrawer.classList.add('expanded');
-                btnToggleMoreRepos.setAttribute('aria-expanded', 'true');
-                if (toggleMoreReposText) toggleMoreReposText.textContent = 'Show Fewer Repositories ↑';
-                playBotChirp(520);
-            }
-        });
-    }
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -169,13 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const filterValue = btn.getAttribute('data-filter');
             playBotChirp(400);
-
-            // Automatically expand the drawer if filtering specific categories
-            if (filterValue !== 'all' && moreReposDrawer && !moreReposDrawer.classList.contains('expanded')) {
-                moreReposDrawer.classList.add('expanded');
-                if (btnToggleMoreRepos) btnToggleMoreRepos.setAttribute('aria-expanded', 'true');
-                if (toggleMoreReposText) toggleMoreReposText.textContent = 'Show Fewer Repositories ↑';
-            }
 
             projectCards.forEach(card => {
                 const category = card.getAttribute('data-category');
