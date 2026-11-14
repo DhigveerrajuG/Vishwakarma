@@ -1,25 +1,17 @@
-/**
- * Dhigveerraju G - Robotics & Artificial Intelligence Portfolio Server (Node.js)
- * High-performance, zero-external-dependency HTTP API & Static File Server.
- */
-
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-
 const PORT = process.env.PORT || 8080;
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
 const RESUME_REQUESTS_FILE = path.join(DATA_DIR, 'resume_requests.json');
-
 const VALID_ADMIN_HASHES = [
-    '65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50', // Cryptographic SHA-256 owner hash
-    'e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973', // ROBOTICS-AUTH
-    'efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5'  // ACCESS-GRANTED
+    '65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50', 
+    'e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973', 
+    'efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5'  
 ];
-
 function verifyPasscode(passcode) {
     if (!passcode) return false;
     const clean = passcode.trim();
@@ -28,8 +20,6 @@ function verifyPasscode(passcode) {
     const hash = crypto.createHash('sha256').update(clean).digest('hex');
     return VALID_ADMIN_HASHES.includes(hash);
 }
-
-// Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
 }
@@ -39,7 +29,6 @@ if (!fs.existsSync(CONTACTS_FILE)) {
 if (!fs.existsSync(RESUME_REQUESTS_FILE)) {
     fs.writeFileSync(RESUME_REQUESTS_FILE, '[]', 'utf8');
 }
-
 const MIME_TYPES = {
     '.html': 'text/html; charset=UTF-8',
     '.css': 'text/css; charset=UTF-8',
@@ -51,19 +40,16 @@ const MIME_TYPES = {
     '.ico': 'image/x-icon',
     '.map': 'application/json'
 };
-
 function sendCors(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-admin-passcode');
 }
-
 function sendJson(res, statusCode, data) {
     sendCors(res);
     res.writeHead(statusCode, { 'Content-Type': 'application/json; charset=UTF-8' });
     res.end(JSON.stringify(data));
 }
-
 function readBody(req) {
     return new Promise((resolve, reject) => {
         let body = '';
@@ -78,20 +64,15 @@ function readBody(req) {
         req.on('error', reject);
     });
 }
-
 const server = http.createServer(async (req, res) => {
     sendCors(res);
-
     if (req.method === 'OPTIONS') {
         res.writeHead(204);
         res.end();
         return;
     }
-
     const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
     const pathname = parsedUrl.pathname;
-
-    // API: Health Check
     if (pathname === '/api/health') {
         sendJson(res, 200, {
             status: 'UP',
@@ -102,19 +83,14 @@ const server = http.createServer(async (req, res) => {
         });
         return;
     }
-
-    // API: Contact Form Submission
     if (pathname === '/api/contact' && req.method === 'POST') {
         try {
             const body = await readBody(req);
             const { name, email, message } = body;
-
             if (!name || !email || !message) {
                 sendJson(res, 400, { success: false, error: 'Name, email, and message are required.' });
                 return;
             }
-
-            // Save transmission
             let contacts = [];
             try {
                 contacts = JSON.parse(fs.readFileSync(CONTACTS_FILE, 'utf8'));
@@ -123,7 +99,6 @@ const server = http.createServer(async (req, res) => {
             }
             contacts.push({ name, email, message, timestamp: Date.now() });
             fs.writeFileSync(CONTACTS_FILE, JSON.stringify(contacts, null, 2), 'utf8');
-
             sendJson(res, 200, {
                 success: true,
                 message: `Transmission received! Thank you ${name}. Dhigveerraju will reply to ${email} promptly.`
@@ -133,18 +108,14 @@ const server = http.createServer(async (req, res) => {
         }
         return;
     }
-
-    // API: Resume Access Request Submission
     if (pathname === '/api/resume-request' && req.method === 'POST') {
         try {
             const body = await readBody(req);
             const { name, email, org, purpose } = body;
-
             if (!name || !email) {
                 sendJson(res, 400, { success: false, error: 'Name and email are required.' });
                 return;
             }
-
             const RESUME_REQUESTS_FILE = path.join(DATA_DIR, 'resume_requests.json');
             let requests = [];
             try {
@@ -152,7 +123,6 @@ const server = http.createServer(async (req, res) => {
             } catch (e) {
                 requests = [];
             }
-
             const newRequest = {
                 id: 'req_' + Date.now(),
                 name,
@@ -164,8 +134,6 @@ const server = http.createServer(async (req, res) => {
             };
             requests.push(newRequest);
             fs.writeFileSync(RESUME_REQUESTS_FILE, JSON.stringify(requests, null, 2), 'utf8');
-
-            // Also record in contacts file
             try {
                 let contacts = JSON.parse(fs.readFileSync(CONTACTS_FILE, 'utf8'));
                 contacts.push({
@@ -176,7 +144,6 @@ const server = http.createServer(async (req, res) => {
                 });
                 fs.writeFileSync(CONTACTS_FILE, JSON.stringify(contacts, null, 2), 'utf8');
             } catch (e) {}
-
             sendJson(res, 200, {
                 success: true,
                 message: `Resume access request recorded for ${name}. Notification dispatched to Dhigveerraju.`
@@ -186,24 +153,19 @@ const server = http.createServer(async (req, res) => {
         }
         return;
     }
-
-    // API: Admin Dashboard Data (Owner Access)
     if (pathname === '/api/admin/data' && (req.method === 'GET' || req.method === 'POST')) {
         const authHeader = req.headers['x-admin-passcode'] || req.headers['authorization'];
         let passcode = (authHeader || '').replace('Bearer ', '').trim();
-
         if (req.method === 'POST') {
             try {
                 const body = await readBody(req);
                 if (body && body.passcode) passcode = body.passcode;
             } catch (e) {}
         }
-
         if (!verifyPasscode(passcode)) {
             sendJson(res, 401, { success: false, error: 'Unauthorized: Invalid owner passcode' });
             return;
         }
-
         let resumeRequests = [];
         let contacts = [];
         try {
@@ -213,7 +175,6 @@ const server = http.createServer(async (req, res) => {
         } catch (e) {
             resumeRequests = [];
         }
-
         try {
             if (fs.existsSync(CONTACTS_FILE)) {
                 contacts = JSON.parse(fs.readFileSync(CONTACTS_FILE, 'utf8'));
@@ -221,7 +182,6 @@ const server = http.createServer(async (req, res) => {
         } catch (e) {
             contacts = [];
         }
-
         sendJson(res, 200, {
             success: true,
             resumeRequests,
@@ -229,27 +189,21 @@ const server = http.createServer(async (req, res) => {
         });
         return;
     }
-
-    // API: Admin Approve Resume Request
     if (pathname === '/api/admin/approve' && req.method === 'POST') {
         const authHeader = req.headers['x-admin-passcode'] || req.headers['authorization'];
         let passcode = (authHeader || '').replace('Bearer ', '').trim();
-
         try {
             const body = await readBody(req);
             if (body && body.passcode) passcode = body.passcode;
             const reqId = body ? body.id : null;
-
             if (!verifyPasscode(passcode)) {
                 sendJson(res, 401, { success: false, error: 'Unauthorized: Invalid owner passcode' });
                 return;
             }
-
             if (!reqId) {
                 sendJson(res, 400, { success: false, error: 'Missing request ID' });
                 return;
             }
-
             let requests = [];
             try {
                 if (fs.existsSync(RESUME_REQUESTS_FILE)) {
@@ -258,7 +212,6 @@ const server = http.createServer(async (req, res) => {
             } catch (e) {
                 requests = [];
             }
-
             let found = false;
             for (let item of requests) {
                 if (item.id === reqId) {
@@ -268,7 +221,6 @@ const server = http.createServer(async (req, res) => {
                     break;
                 }
             }
-
             if (found) {
                 fs.writeFileSync(RESUME_REQUESTS_FILE, JSON.stringify(requests, null, 2), 'utf8');
                 sendJson(res, 200, { success: true, id: reqId, status: 'APPROVED' });
@@ -280,16 +232,12 @@ const server = http.createServer(async (req, res) => {
         }
         return;
     }
-
-    // API: RoboGuide AI Copilot Chat
     if (pathname === '/api/chat' && req.method === 'POST') {
         try {
             const body = await readBody(req);
             const query = (body.message || '').toLowerCase().trim();
-
             let replyHtml = '';
             let category = 'general';
-
             if (query.includes('who are you') || query.includes('what are you') || query.includes('your name') || query === 'help') {
                 category = 'identity';
                 replyHtml = "🤖 I'm <strong>RoboGuide</strong>, Dhigveerraju's personal AI companion! I'm trained on his entire engineering portfolio. You can ask me about his <strong>popular projects</strong> (Conveyor Sentinel AI, Dual-Motor PWM), his <strong>embedded & AI skills</strong>, his <strong>background</strong>, or how to <strong>contact him</strong>!";
@@ -368,15 +316,12 @@ const server = http.createServer(async (req, res) => {
             } else {
                 replyHtml = `🤖 Thanks for asking about <em>"${query.replace(/"/g, '')}"</em>! As Dhigveerraju's AI copilot, I can tell you about his <strong>flagship projects</strong> (Conveyor Sentinel AI, Dual-Motor PWM), his <strong>skills & tech stack</strong> (C++, Python, YOLOv8, Arduino), or how to <strong>get in touch</strong>. What would you like to explore?`;
             }
-
             sendJson(res, 200, { reply: replyHtml, category });
         } catch (err) {
             sendJson(res, 400, { error: 'Invalid request' });
         }
         return;
     }
-
-    // API: Dynamic Projects Data
     if (pathname === '/api/projects') {
         sendJson(res, 200, {
             status: 'success',
@@ -389,23 +334,16 @@ const server = http.createServer(async (req, res) => {
         });
         return;
     }
-
-    // Static File Serving
     let filePath = path.join(ROOT_DIR, pathname === '/' ? 'index.html' : pathname);
-
-    // Guard against directory traversal
     if (!filePath.startsWith(ROOT_DIR)) {
         filePath = path.join(ROOT_DIR, 'index.html');
     }
-
     fs.stat(filePath, (err, stats) => {
         if (err || stats.isDirectory()) {
             filePath = path.join(ROOT_DIR, 'index.html');
         }
-
         const ext = path.extname(filePath).toLowerCase();
         const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
         fs.readFile(filePath, (readErr, content) => {
             if (readErr) {
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -417,7 +355,6 @@ const server = http.createServer(async (req, res) => {
         });
     });
 });
-
 server.listen(PORT, () => {
     console.log("============================================================");
     console.log("🤖 Dhigveerraju G - Robotics & AI Portfolio Server (Node.js)");

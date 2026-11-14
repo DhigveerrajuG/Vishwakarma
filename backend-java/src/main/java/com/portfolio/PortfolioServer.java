@@ -1,9 +1,7 @@
 package com.portfolio;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URLConnection;
@@ -14,24 +12,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.concurrent.Executors;
-
-/**
- * Dhigveerraju G - Robotics & Artificial Intelligence Portfolio Backend
- * High-performance, zero-dependency HTTP API & Static File Server in Java 26.
- */
 public class PortfolioServer {
-
     private static final int DEFAULT_PORT = 8080;
     private static final Path ROOT_DIR = Paths.get(".").toAbsolutePath().normalize();
     private static final Path DATA_DIR = ROOT_DIR.resolve("data");
     private static final Path CONTACTS_FILE = DATA_DIR.resolve("contacts.json");
     private static final Path RESUME_REQUESTS_FILE = DATA_DIR.resolve("resume_requests.json");
     private static final String[] VALID_ADMIN_HASHES = {
-        "65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50", // SHA-256 owner hash
-        "e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973", // ROBOTICS-AUTH
-        "efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5"  // ACCESS-GRANTED
+        "65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50", 
+        "e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973", 
+        "efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5"  
     };
-
     private static boolean verifyAdminPasscode(String passcode) {
         if (passcode == null || passcode.isBlank()) return false;
         String clean = passcode.trim();
@@ -53,7 +44,6 @@ public class PortfolioServer {
         } catch (Exception ignored) {}
         return false;
     }
-
     public static void main(String[] args) throws IOException {
         int port = DEFAULT_PORT;
         String portEnv = System.getenv("PORT");
@@ -62,15 +52,11 @@ public class PortfolioServer {
                 port = Integer.parseInt(portEnv);
             } catch (NumberFormatException ignored) {}
         }
-
         Files.createDirectories(DATA_DIR);
         if (!Files.exists(CONTACTS_FILE)) {
             Files.writeString(CONTACTS_FILE, "[]", StandardCharsets.UTF_8);
         }
-
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-
-        // API Endpoints
         server.createContext("/api/health", new HealthHandler());
         server.createContext("/api/contact", new ContactHandler());
         server.createContext("/api/resume-request", new ResumeRequestHandler());
@@ -78,26 +64,20 @@ public class PortfolioServer {
         server.createContext("/api/admin/approve", new AdminApproveHandler());
         server.createContext("/api/chat", new ChatHandler());
         server.createContext("/api/projects", new ProjectsHandler());
-
-        // Static Asset Handler for Frontend
         server.createContext("/", new StaticFileHandler());
-
         server.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
         server.start();
-
         System.out.println("============================================================");
         System.out.println("🤖 Dhigveerraju G - Robotics & AI Portfolio Server (Java 26)");
         System.out.println("🚀 Live on: http://localhost:" + port);
         System.out.println("📡 Endpoints: /api/health, /api/contact, /api/resume-request, /api/admin/data, /api/admin/approve, /api/chat, /api/projects");
         System.out.println("============================================================");
     }
-
     private static void sendCorsHeaders(HttpExchange exchange) {
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization, x-admin-passcode");
     }
-
     private static void sendJsonResponse(HttpExchange exchange, int statusCode, String json) throws IOException {
         sendCorsHeaders(exchange);
         exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
@@ -107,7 +87,6 @@ public class PortfolioServer {
             os.write(bytes);
         }
     }
-
     private static String readRequestBody(HttpExchange exchange) throws IOException {
         try (InputStream is = exchange.getRequestBody();
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
@@ -119,7 +98,6 @@ public class PortfolioServer {
             return sb.toString();
         }
     }
-
     private static String extractJsonField(String json, String key) {
         String pattern = "\"" + key + "\"\\s*:\\s*\"([^\"]*)\"";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern);
@@ -129,8 +107,6 @@ public class PortfolioServer {
         }
         return "";
     }
-
-    // Health Check Handler
     static class HealthHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -144,8 +120,6 @@ public class PortfolioServer {
             sendJsonResponse(exchange, 200, json);
         }
     }
-
-    // Contact Form Handler
     static class ContactHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -158,18 +132,14 @@ public class PortfolioServer {
                 sendJsonResponse(exchange, 405, "{\"success\":false,\"error\":\"Method Not Allowed\"}");
                 return;
             }
-
             String body = readRequestBody(exchange);
             String name = extractJsonField(body, "name");
             String email = extractJsonField(body, "email");
             String message = extractJsonField(body, "message");
-
             if (name.isEmpty() || email.isEmpty() || message.isEmpty()) {
                 sendJsonResponse(exchange, 400, "{\"success\":false,\"error\":\"Name, email, and message are required.\"}");
                 return;
             }
-
-            // Append to contacts.json safely
             synchronized (PortfolioServer.class) {
                 try {
                     String existing = Files.exists(CONTACTS_FILE) ? Files.readString(CONTACTS_FILE, StandardCharsets.UTF_8).trim() : "[]";
@@ -181,21 +151,17 @@ public class PortfolioServer {
                             email.replace("\"", "\\\""),
                             message.replace("\"", "\\\""),
                             Instant.now().toEpochMilli());
-
                     String updated = existing.length() > 1 && !existing.equals("[") ? existing + ",\n" + entry + "\n]" : "[\n" + entry + "\n]";
                     Files.writeString(CONTACTS_FILE, updated, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
                 } catch (Exception ex) {
                     System.err.println("Failed to write contact message: " + ex.getMessage());
                 }
             }
-
             String reply = String.format("{\"success\":true,\"message\":\"Transmission received! Thank you %s. Dhigveerraju will reply to %s promptly.\"}",
                     name.replace("\"", "\\\""), email.replace("\"", "\\\""));
             sendJsonResponse(exchange, 200, reply);
         }
     }
-
-    // Resume Access Request Handler
     static class ResumeRequestHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -208,18 +174,15 @@ public class PortfolioServer {
                 sendJsonResponse(exchange, 405, "{\"success\":false,\"error\":\"Method Not Allowed\"}");
                 return;
             }
-
             String body = readRequestBody(exchange);
             String name = extractJsonField(body, "name");
             String email = extractJsonField(body, "email");
             String org = extractJsonField(body, "org");
             String purpose = extractJsonField(body, "purpose");
-
             if (name.isEmpty() || email.isEmpty()) {
                 sendJsonResponse(exchange, 400, "{\"success\":false,\"error\":\"Name and email are required.\"}");
                 return;
             }
-
             synchronized (PortfolioServer.class) {
                 try {
                     String existing = Files.exists(RESUME_REQUESTS_FILE) ? Files.readString(RESUME_REQUESTS_FILE, StandardCharsets.UTF_8).trim() : "[]";
@@ -233,21 +196,17 @@ public class PortfolioServer {
                             org.replace("\"", "\\\""),
                             purpose.replace("\"", "\\\""),
                             Instant.now().toEpochMilli());
-
                     String updated = existing.length() > 1 && !existing.equals("[") ? existing + ",\n" + entry + "\n]" : "[\n" + entry + "\n]";
                     Files.writeString(RESUME_REQUESTS_FILE, updated, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
                 } catch (Exception ex) {
                     System.err.println("Failed to write resume request: " + ex.getMessage());
                 }
             }
-
             String reply = String.format("{\"success\":true,\"message\":\"Resume access request recorded for %s. Notification dispatched to Dhigveerraju.\"}",
                     name.replace("\"", "\\\""));
             sendJsonResponse(exchange, 200, reply);
         }
     }
-
-    // Admin Dashboard Data Handler (Owner Access)
     static class AdminDataHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -256,7 +215,6 @@ public class PortfolioServer {
                 exchange.sendResponseHeaders(204, -1);
                 return;
             }
-
             String authHeader = exchange.getRequestHeaders().getFirst("x-admin-passcode");
             if (authHeader == null || authHeader.isEmpty()) {
                 authHeader = exchange.getRequestHeaders().getFirst("Authorization");
@@ -264,22 +222,18 @@ public class PortfolioServer {
                     authHeader = authHeader.substring(7);
                 }
             }
-
             String body = "";
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 body = readRequestBody(exchange);
             }
-
             String passcode = authHeader != null ? authHeader.trim() : "";
             if (passcode.isEmpty() && !body.isEmpty()) {
                 passcode = extractJsonField(body, "passcode");
             }
-
             if (!verifyAdminPasscode(passcode)) {
                 sendJsonResponse(exchange, 401, "{\"success\":false,\"error\":\"Unauthorized: Invalid owner passcode\"}");
                 return;
             }
-
             String reqsJson = "[]";
             String contactsJson = "[]";
             try {
@@ -288,20 +242,16 @@ public class PortfolioServer {
                     if (!content.isEmpty()) reqsJson = content;
                 }
             } catch (Exception ignored) {}
-
             try {
                 if (Files.exists(CONTACTS_FILE)) {
                     String content = Files.readString(CONTACTS_FILE, StandardCharsets.UTF_8).trim();
                     if (!content.isEmpty()) contactsJson = content;
                 }
             } catch (Exception ignored) {}
-
             String resp = String.format("{\"success\":true,\"resumeRequests\":%s,\"contacts\":%s}", reqsJson, contactsJson);
             sendJsonResponse(exchange, 200, resp);
         }
     }
-
-    // Admin Approve Resume Request Handler
     static class AdminApproveHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -314,7 +264,6 @@ public class PortfolioServer {
                 sendJsonResponse(exchange, 405, "{\"error\":\"Method Not Allowed\"}");
                 return;
             }
-
             String authHeader = exchange.getRequestHeaders().getFirst("x-admin-passcode");
             if (authHeader == null || authHeader.isEmpty()) {
                 authHeader = exchange.getRequestHeaders().getFirst("Authorization");
@@ -327,18 +276,15 @@ public class PortfolioServer {
             if (passcode.isEmpty()) {
                 passcode = extractJsonField(body, "passcode");
             }
-
             if (!verifyAdminPasscode(passcode)) {
                 sendJsonResponse(exchange, 401, "{\"success\":false,\"error\":\"Unauthorized: Invalid owner passcode\"}");
                 return;
             }
-
             String reqId = extractJsonField(body, "id");
             if (reqId.isEmpty()) {
                 sendJsonResponse(exchange, 400, "{\"success\":false,\"error\":\"Missing request ID\"}");
                 return;
             }
-
             boolean found = false;
             synchronized (PortfolioServer.class) {
                 try {
@@ -358,7 +304,6 @@ public class PortfolioServer {
                     System.err.println("Failed to approve resume request: " + ex.getMessage());
                 }
             }
-
             if (found) {
                 String reply = String.format("{\"success\":true,\"id\":\"%s\",\"status\":\"APPROVED\"}", reqId);
                 sendJsonResponse(exchange, 200, reply);
@@ -367,8 +312,6 @@ public class PortfolioServer {
             }
         }
     }
-
-    // RoboGuide AI Copilot Chat Handler
     static class ChatHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -381,13 +324,10 @@ public class PortfolioServer {
                 sendJsonResponse(exchange, 405, "{\"error\":\"Method Not Allowed\"}");
                 return;
             }
-
             String body = readRequestBody(exchange);
             String query = extractJsonField(body, "message").toLowerCase().trim();
-
             String replyHtml;
             String category = "general";
-
             if (query.contains("who are you") || query.contains("what are you") || query.contains("your name") || query.equals("help")) {
                 category = "identity";
                 replyHtml = "🤖 I'm <strong>RoboGuide</strong>, Dhigveerraju's personal AI companion! I'm trained on his entire engineering portfolio. You can ask me about his <strong>popular projects</strong> (Conveyor Sentinel AI, Dual-Motor PWM), his <strong>embedded & AI skills</strong>, his <strong>background</strong>, or how to <strong>contact him</strong>!";
@@ -467,14 +407,11 @@ public class PortfolioServer {
                 replyHtml = String.format("🤖 Thanks for asking about <em>\\\"%s\\\"</em>! As Dhigveerraju's AI copilot, I can tell you about his <strong>flagship projects</strong> (Conveyor Sentinel AI, Dual-Motor PWM), his <strong>skills & tech stack</strong> (C++, Python, YOLOv8, Arduino), or how to <strong>get in touch</strong>. What would you like to explore?",
                         query.replace("\"", ""));
             }
-
             String json = String.format("{\"reply\":\"%s\",\"category\":\"%s\"}",
                     replyHtml.replace("\"", "\\\"").replace("\n", ""), category);
             sendJsonResponse(exchange, 200, json);
         }
     }
-
-    // Projects Data Handler
     static class ProjectsHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -497,8 +434,6 @@ public class PortfolioServer {
             sendJsonResponse(exchange, 200, json);
         }
     }
-
-    // Static File Serving Handler
     static class StaticFileHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -506,13 +441,10 @@ public class PortfolioServer {
             if (pathStr.equals("/") || pathStr.isEmpty()) {
                 pathStr = "/index.html";
             }
-
-            // Prevent path traversal
             Path resolved = ROOT_DIR.resolve(pathStr.substring(1)).normalize();
             if (!resolved.startsWith(ROOT_DIR) || !Files.exists(resolved) || Files.isDirectory(resolved)) {
                 resolved = ROOT_DIR.resolve("index.html");
             }
-
             if (!Files.exists(resolved)) {
                 String notFound = "<h1>404 Not Found</h1>";
                 exchange.sendResponseHeaders(404, notFound.length());
@@ -521,7 +453,6 @@ public class PortfolioServer {
                 }
                 return;
             }
-
             String mime = URLConnection.guessContentTypeFromName(resolved.getFileName().toString());
             if (mime == null) {
                 String fname = resolved.getFileName().toString().toLowerCase();
@@ -531,7 +462,6 @@ public class PortfolioServer {
                 else if (fname.endsWith(".json")) mime = "application/json; charset=UTF-8";
                 else mime = "application/octet-stream";
             }
-
             sendCorsHeaders(exchange);
             exchange.getResponseHeaders().set("Content-Type", mime);
             byte[] fileBytes = Files.readAllBytes(resolved);

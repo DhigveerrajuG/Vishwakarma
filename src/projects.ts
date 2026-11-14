@@ -1,10 +1,5 @@
-/**
- * Project Filtering, Tabbed Modal Inspection, Code Snippets, & Schematics Showcase
- */
-
 import { ProjectDetail, ProjectMap } from './types';
 import { playBotChirp } from './audio';
-
 export const PROJECT_DETAILS: ProjectMap = {
     'conveyor-sentinel': {
         title: "Conveyor Sentinel AI",
@@ -24,18 +19,15 @@ export const PROJECT_DETAILS: ProjectMap = {
             code: `import cv2
 import numpy as np
 from ultralytics import YOLO
-
 class ConveyorSentinelAI:
     def __init__(self, model_path="weights/yolov8n_conveyor_v2.pt", relay_pin=18):
         self.model = YOLO(model_path)
         self.relay_pin = relay_pin
         self.fps_buffer = []
-
     def process_frame(self, frame: np.ndarray):
         # 1. High-throughput YOLOv8 Anomaly Inference
         results = self.model.predict(source=frame, conf=0.72, verbose=False)[0]
         critical_anomaly = False
-
         for box in results.boxes:
             cls_id = int(box.cls[0])
             conf = float(box.conf[0])
@@ -43,7 +35,6 @@ class ConveyorSentinelAI:
             if cls_id in (0, 1) and conf >= 0.85:
                 critical_anomaly = True
                 self.trigger_safety_interlock(box.xyxy[0].tolist(), conf)
-
         # 2. Fallback morphological contour tracking for high-speed motion blur
         if not critical_anomaly:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -53,9 +44,7 @@ class ConveyorSentinelAI:
             for cnt in contours:
                 if cv2.contourArea(cnt) > 850:
                     critical_anomaly = True
-
         return results, critical_anomaly
-
     def trigger_safety_interlock(self, coords, confidence):
         # Fast GPIO pulse to safety stop relays in <22ms
         print(f"[ALERT] Critical defect detected ({confidence*100:.1f}%). Triggering E-STOP relay!")`
@@ -87,22 +76,16 @@ class ConveyorSentinelAI:
             language: "cpp",
             filename: "synchronized_drive.cpp",
             code: `#include <Arduino.h>
-
-// Pins for Dual L298N H-Bridge Actuation
-const uint8_t ENA_PIN = 9;   // Timer1 PWM (Motor A)
-const uint8_t ENB_PIN = 10;  // Timer1 PWM (Motor B)
+const uint8_t ENA_PIN = 9;
+const uint8_t ENB_PIN = 10;
 const uint8_t IN1_PIN = 4;
 const uint8_t IN2_PIN = 5;
 const uint8_t IN3_PIN = 6;
 const uint8_t IN4_PIN = 7;
-
-// Soft-Start Ramping Parameters
-const uint8_t TARGET_DUTY = 220;   // 86% Max Duty Cycle
-const uint8_t RAMP_STEP_DELAY_MS = 18; // Step delay prevents inrush spike
-
+const uint8_t TARGET_DUTY = 220;
+const uint8_t RAMP_STEP_DELAY_MS = 18;
 void setupMotorTimers() {
-    // Configure Timer1 for 31.37 kHz Phase-Correct PWM (Eliminates audible coil whine)
-    TCCR1B = (TCCR1B & 0b11111000) | 0x01; // No prescaling
+    TCCR1B = (TCCR1B & 0b11111000) | 0x01;
     pinMode(ENA_PIN, OUTPUT);
     pinMode(ENB_PIN, OUTPUT);
     pinMode(IN1_PIN, OUTPUT);
@@ -110,13 +93,9 @@ void setupMotorTimers() {
     pinMode(IN3_PIN, OUTPUT);
     pinMode(IN4_PIN, OUTPUT);
 }
-
 void executeSoftStartRamping(uint8_t targetDuty) {
-    // Forward direction initialization
     digitalWrite(IN1_PIN, HIGH); digitalWrite(IN2_PIN, LOW);
     digitalWrite(IN3_PIN, HIGH); digitalWrite(IN4_PIN, LOW);
-
-    // Linear mathematical duty ramping eliminates belt inertia slip
     for (uint8_t duty = 0; duty <= targetDuty; duty += 4) {
         analogWrite(ENA_PIN, duty);
         analogWrite(ENB_PIN, duty);
@@ -154,12 +133,10 @@ void executeSoftStartRamping(uint8_t targetDuty) {
             code: `import serial
 import json
 import time
-
 class SerialTelemetryHUD:
     def __init__(self, port="/dev/ttyUSB0", baud=115200):
         self.ser = serial.Serial(port, baud, timeout=0.05)
         self.stream_active = True
-
     def stream_telemetry(self, defect_detected: bool, fps: float):
         payload = {
             "timestamp_ms": int(time.time() * 1000),
@@ -197,20 +174,15 @@ class SerialTelemetryHUD:
             filename: "prizm_encoder_kinematics.cpp",
             code: `#include <PRIZM.h>
 PRIZM prizm;
-
 void setup() {
     prizm.PrizmBegin();
     prizm.setMotorInvert(1, 1);
     prizm.resetEncoders();
 }
-
 void loop() {
-    // Closed-Loop Velocity Matching under dynamic load
     long countM1 = prizm.readEncoderCount(1);
     long countM2 = prizm.readEncoderCount(2);
     long error = countM1 - countM2;
-
-    // Proportional trim to keep both roller shafts synchronized within ±2 ticks
     int trim = (int)(error * 0.45);
     prizm.setMotorPowers(125 - trim, 125 + trim);
     delay(10);
@@ -226,25 +198,20 @@ void loop() {
         }
     }
 };
-
 export function initProjects(): void {
     initFilters();
     initModals();
     syncRepoStats();
 }
-
 function initFilters(): void {
     const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
     const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
-
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             const filter = btn.getAttribute('data-filter') || 'all';
             playBotChirp(480);
-
             projectCards.forEach(card => {
                 const category = card.getAttribute('data-category');
                 if (filter === 'all' || category === filter) {
@@ -256,20 +223,16 @@ function initFilters(): void {
         });
     });
 }
-
 function escapeHtml(str: string): string {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
 }
-
 export function openProjectModal(projectId: string): void {
     const details = PROJECT_DETAILS[projectId];
     const modalBackdrop = document.getElementById('project-modal-backdrop');
     const modalContentArea = document.getElementById('modal-content-area');
-
     if (!details || !modalContentArea || !modalBackdrop) return;
-
     playBotChirp(520);
     modalContentArea.innerHTML = `
         <div style="margin-bottom: 16px;">
@@ -278,15 +241,11 @@ export function openProjectModal(projectId: string): void {
             <h4 style="font-size: 0.92rem; color: var(--primary);">${details.subtitle}</h4>
         </div>
         <p style="font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.55;">${details.summary}</p>
-        
-        <!-- Interactive Project Tabs -->
         <div class="project-modal-tabs">
             <button type="button" class="proj-tab-btn active" data-tab="arch">📐 Architecture</button>
             ${details.codeSnippet ? `<button type="button" class="proj-tab-btn" data-tab="code">💻 Source Code</button>` : ''}
             ${details.schematics ? `<button type="button" class="proj-tab-btn" data-tab="specs">🔌 Specs & Pins</button>` : ''}
         </div>
-
-        <!-- Tab 1: Architecture -->
         <div class="proj-tab-pane active" id="tab-pane-arch">
             <h4 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">Key Engineering Architecture</h4>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
@@ -297,14 +256,11 @@ export function openProjectModal(projectId: string): void {
                     </li>
                 `).join('')}
             </ul>
-
             <h4 style="font-size: 0.95rem; margin-bottom: 10px;">Technologies Utilized</h4>
             <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;">
                 ${details.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}
             </div>
         </div>
-
-        <!-- Tab 2: Code Snippet -->
         ${details.codeSnippet ? `
         <div class="proj-tab-pane" id="tab-pane-code" style="display: none;">
             <div class="code-snippet-header">
@@ -316,8 +272,6 @@ export function openProjectModal(projectId: string): void {
             <pre class="code-snippet-pre"><code class="language-${details.codeSnippet.language}" id="code-snippet-target">${escapeHtml(details.codeSnippet.code)}</code></pre>
         </div>
         ` : ''}
-
-        <!-- Tab 3: Hardware Specs -->
         ${details.schematics ? `
         <div class="proj-tab-pane" id="tab-pane-specs" style="display: none;">
             <h4 style="font-size: 0.98rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">${details.schematics.label}</h4>
@@ -335,7 +289,6 @@ export function openProjectModal(projectId: string): void {
             </div>
         </div>
         ` : ''}
-
         <div style="display: flex; gap: 10px; align-items: center; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--border-color);">
             <a href="${details.github}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>View Full GitHub Source</span>
@@ -343,26 +296,19 @@ export function openProjectModal(projectId: string): void {
             </a>
         </div>
     `;
-
-    // Wire up tab switching inside modal
     const tabBtns = modalContentArea.querySelectorAll<HTMLButtonElement>('.proj-tab-btn');
     const panes = modalContentArea.querySelectorAll<HTMLElement>('.proj-tab-pane');
-
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.getAttribute('data-tab');
             tabBtns.forEach(b => b.classList.remove('active'));
             panes.forEach(p => p.style.display = 'none');
-
             btn.classList.add('active');
             playBotChirp(440, 'sine', 0.05);
-
             const activePane = modalContentArea.querySelector<HTMLElement>(`#tab-pane-${target}`);
             if (activePane) activePane.style.display = 'block';
         });
     });
-
-    // Wire up copy button
     const copyBtn = modalContentArea.querySelector<HTMLButtonElement>('#btn-copy-modal-code');
     const codeTarget = modalContentArea.querySelector<HTMLElement>('#code-snippet-target');
     if (copyBtn && codeTarget) {
@@ -379,21 +325,17 @@ export function openProjectModal(projectId: string): void {
             }
         });
     }
-
     modalBackdrop.classList.add('open');
 }
-
 function initModals(): void {
     const modalBackdrop = document.getElementById('project-modal-backdrop');
     const modalCloseBtn = document.getElementById('modal-close-btn');
-
     document.querySelectorAll<HTMLButtonElement>('.btn-inspect-project').forEach(btn => {
         btn.addEventListener('click', () => {
             const projectId = btn.getAttribute('data-project');
             if (projectId) openProjectModal(projectId);
         });
     });
-
     if (modalCloseBtn && modalBackdrop) {
         modalCloseBtn.addEventListener('click', () => modalBackdrop.classList.remove('open'));
         modalBackdrop.addEventListener('click', (e) => {
@@ -401,11 +343,9 @@ function initModals(): void {
         });
     }
 }
-
 async function syncRepoStats(): Promise<void> {
     const el = document.getElementById('stats-conveyor-sentinel');
     if (!el) return;
-
     try {
         const cached = localStorage.getItem('dhigveer_github_sync_v3');
         if (cached) {
@@ -415,7 +355,6 @@ async function syncRepoStats(): Promise<void> {
                 return;
             }
         }
-
         const res = await fetch('https://api.github.com/users/DhigveerrajuG/repos?per_page=100');
         if (res.ok) {
             const repos = await res.json();
@@ -426,7 +365,6 @@ async function syncRepoStats(): Promise<void> {
         el.innerHTML = `<span>⭐ 2</span> <span>🍴 1</span>`;
     }
 }
-
 function applyStats(repos: Array<{ name: string; stargazers_count?: number; forks_count?: number }>, el: HTMLElement): void {
     const match = repos.find(r => r.name.toLowerCase().includes('conveyor') || r.name.toLowerCase().includes('autonomous-industrial'));
     if (match) {

@@ -8,8 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
+    <style>        :root {
             --primary: #2563eb;
             --text-dark: #0f172a;
             --text-muted: #475569;
@@ -53,8 +52,6 @@
         .btn-primary:hover { background: #1d4ed8; }
         .btn-outline { background: #fff; color: var(--text-dark); border: 1px solid var(--border); }
         .btn-outline:hover { background: #f8fafc; }
-        
-        /* Restricted Access Gatekeeper Card */
         .auth-gate {
             max-width: 480px;
             margin: 60px auto;
@@ -82,8 +79,6 @@
         .auth-error { color: #ef4444; font-size: 0.85rem; font-weight: 600; display: none; margin-top: 6px; }
         .auth-return-link { margin-top: 24px; font-size: 0.88rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 18px; }
         .auth-return-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
-
-        /* The Printable Resume Sheet */
         .resume-sheet {
             max-width: 800px;
             margin: 0 auto;
@@ -118,16 +113,13 @@
         .entry-bullets li { margin-bottom: 4px; }
         .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 0.9rem; }
         .skills-category strong { color: var(--text-dark); display: block; margin-bottom: 2px; }
-    </style>
+</style>
 </head>
 <body>
-
-    <!-- 1. Authorization Gatekeeper Screen (Shown when not authorized) -->
     <div class="auth-gate no-print" id="auth-gate">
         <div class="auth-icon">🔒</div>
         <h2>Restricted Access Document</h2>
         <p>This engineering dossier contains proprietary robotics firmware and vision algorithms. Access requires explicit owner authorization from <strong>Dhigveerraju G</strong>.</p>
-        
         <form id="auth-form">
             <div class="auth-input-group">
                 <input type="password" id="auth-input" placeholder="Enter authorization passcode" class="auth-input" required>
@@ -135,20 +127,15 @@
             </div>
             <div id="auth-error" class="auth-error">Invalid authorization passcode. Please request access from the portfolio.</div>
         </form>
-
         <div class="auth-return-link">
             Don't have an authorization passcode?<br>
             <a href="../index.html#contact">← Return to Portfolio &amp; Request Access</a>
         </div>
     </div>
-
-    <!-- 2. Action Bar (Shown when authorized) -->
     <div class="action-bar no-print" id="action-bar" style="display: none;">
         <a href="../index.html" class="btn btn-outline">← Back to Portfolio</a>
         <button onclick="window.print()" class="btn btn-primary">🖨️ Print / Save as PDF</button>
     </div>
-
-    <!-- 3. Authorized Printable Resume Sheet -->
     <div class="resume-sheet" id="resume-content" style="display: none;">
         <header class="header">
             <h1 class="name">DHIGVEERRAJU G</h1>
@@ -161,17 +148,14 @@
                 <a href="https://github.com/DhigveerrajuG" target="_blank">GitHub: @DhigveerrajuG</a>
             </div>
         </header>
-
         <section>
             <h2 class="section-title">Professional Summary</h2>
             <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;">
                 Robotics and Artificial Intelligence Engineer specializing in <strong>physical intelligence</strong>—bridging embedded microcontrollers (C++), closed-loop sensor telemetry, and edge deep learning computer vision. Passionate about designing robust cyber-physical systems where software directly commands mechanical motion and deterministic physical behavior under industrial operating constraints.
             </p>
         </section>
-
         <section>
             <h2 class="section-title">Key Engineering Projects</h2>
-            
             <div class="entry">
                 <div class="entry-header">
                     <span class="entry-title">Conveyor Sentinel AI</span>
@@ -184,7 +168,6 @@
                     <li>Engineered an automated 5-point safety interlock protocol directly communicating defect criticality thresholds to safety stop relays in &lt;25ms.</li>
                 </ul>
             </div>
-
             <div class="entry">
                 <div class="entry-header">
                     <span class="entry-title">Synchronized Dual-Motor Actuation</span>
@@ -197,7 +180,6 @@
                     <li>Integrated L298N dual H-Bridge motor drivers with flyback diode arrays, dampening inductive back-EMF spikes and preventing gearbox wear.</li>
                 </ul>
             </div>
-
             <div class="entry">
                 <div class="entry-header">
                     <span class="entry-title">Robotics Kinematics &amp; Actuation Lab</span>
@@ -210,7 +192,6 @@
                 </ul>
             </div>
         </section>
-
         <section>
             <h2 class="section-title">Technical Skills</h2>
             <div class="skills-grid">
@@ -233,24 +214,19 @@
             </div>
         </section>
     </div>
-
-    <!-- Client-Side Authorization Logic -->
-    <script>
-        (async function() {
+    <script>        (async function() {
             const VALID_HASHES = [
-                '65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50', // Cryptographic SHA-256 owner hash
-                'e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973', // ROBOTICS-AUTH
-                'efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5'  // ACCESS-GRANTED
+                '65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50', 
+                'e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973', 
+                'efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5'  
             ];
             const PUBLIC_TOKENS = ['ROBOTICS-AUTH', 'ACCESS-GRANTED'];
-
             const authGate = document.getElementById('auth-gate');
             const resumeContent = document.getElementById('resume-content');
             const actionBar = document.getElementById('action-bar');
             const authForm = document.getElementById('auth-form');
             const authInput = document.getElementById('auth-input');
             const authError = document.getElementById('auth-error');
-
             async function hashPasscode(str) {
                 if (!str) return '';
                 if (window.crypto && window.crypto.subtle) {
@@ -261,7 +237,6 @@
                 }
                 return str.trim();
             }
-
             async function checkToken(token) {
                 if (!token) return false;
                 const clean = token.trim();
@@ -269,7 +244,6 @@
                 const hash = await hashPasscode(clean);
                 return VALID_HASHES.includes(hash) || VALID_HASHES.includes(clean);
             }
-
             async function isAuthorized() {
                 if (sessionStorage.getItem('resume_authorized') === 'true') return true;
                 const params = new URLSearchParams(window.location.search);
@@ -280,7 +254,6 @@
                 }
                 return false;
             }
-
             async function renderState() {
                 const auth = await isAuthorized();
                 if (auth) {
@@ -293,7 +266,6 @@
                     if (actionBar) actionBar.style.display = 'none';
                 }
             }
-
             if (authForm) {
                 authForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
@@ -309,9 +281,8 @@
                     }
                 });
             }
-
             await renderState();
         })();
-    </script>
+</script>
 </body>
 </html>

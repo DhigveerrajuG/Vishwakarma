@@ -1,10 +1,5 @@
-/**
- * Contact Form, Resume Access Request, & Owner Approval Dashboard Controller
- */
-
 import { ContactPayload, ResumeRequestPayload, ApiResponse, AdminDashboardData } from './types';
 import { playBotChirp } from './audio';
-
 async function computeSha256(text: string): Promise<string> {
     if (!text) return '';
     if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
@@ -15,14 +10,12 @@ async function computeSha256(text: string): Promise<string> {
     }
     return text.trim();
 }
-
 const VALID_HASHES = [
-    '65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50', // Cryptographic SHA-256 owner hash
-    'e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973', // ROBOTICS-AUTH
-    'efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5'  // ACCESS-GRANTED
+    '65be5e18e6c991aa446e73b207d3e730fdcb8fa40629ed67d346484498bfdf50', 
+    'e77f0d3669b840577debfd91924c98fac4ce1af892b4419eed44d826ad56a973', 
+    'efb554bced586b984ed4c05a8b6042558ab3607c9b5b314fc76a82f779dbc6c5'  
 ];
 const PUBLIC_TOKENS = ['ROBOTICS-AUTH', 'ACCESS-GRANTED'];
-
 export function openResumeModal(): void {
     const resumeModalBackdrop = document.getElementById('resume-modal-backdrop');
     if (resumeModalBackdrop) {
@@ -30,7 +23,6 @@ export function openResumeModal(): void {
         playBotChirp(520, 'sine', 0.1);
     }
 }
-
 export function closeResumeModal(): void {
     const resumeModalBackdrop = document.getElementById('resume-modal-backdrop');
     if (resumeModalBackdrop) {
@@ -38,60 +30,47 @@ export function closeResumeModal(): void {
         playBotChirp(380, 'sine', 0.08);
     }
 }
-
 export function initContact(): void {
     initDirectContactForm();
     initResumeModalHandlers();
     initAdminDashboard();
 }
-
 function initDirectContactForm(): void {
     const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
     const formFeedback = document.getElementById('form-feedback');
     const btnSubmitForm = document.getElementById('btn-submit-form') as HTMLButtonElement | null;
-
     if (!contactForm || !formFeedback) return;
-
     contactForm.addEventListener('submit', async (e: Event) => {
         e.preventDefault();
-
         const nameInput = document.getElementById('form-name') as HTMLInputElement | null;
         const emailInput = document.getElementById('form-email') as HTMLInputElement | null;
         const msgInput = document.getElementById('form-message') as HTMLTextAreaElement | null;
-
         if (!nameInput || !emailInput || !msgInput) return;
-
         const payload: ContactPayload = {
             name: nameInput.value.trim(),
             email: emailInput.value.trim(),
             message: msgInput.value.trim(),
             timestamp: Date.now()
         };
-
         if (!payload.name || !payload.email || !payload.message) return;
-
         if (btnSubmitForm) {
             btnSubmitForm.disabled = true;
             btnSubmitForm.innerHTML = `<span>Transmitting...</span>`;
         }
         playBotChirp(600, 'sine', 0.12);
-
         try {
             const res = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-
             let replyMsg = `✅ <strong>Transmission Dispatched!</strong> Thank you ${payload.name}. Dhigveerraju will reply to ${payload.email} promptly.`;
-
             if (res.ok) {
                 const data = (await res.json()) as ApiResponse;
                 if (data.message) {
                     replyMsg = `✅ <strong>Transmission Dispatched!</strong> ${data.message}`;
                 }
             }
-
             formFeedback.style.display = 'flex';
             formFeedback.innerHTML = `<span>${replyMsg}</span>`;
             contactForm.reset();
@@ -114,7 +93,6 @@ function initDirectContactForm(): void {
         }
     });
 }
-
 function initResumeModalHandlers(): void {
     const btnOpenResumeModal = document.getElementById('btn-open-resume-modal');
     const resumeModalBackdrop = document.getElementById('resume-modal-backdrop');
@@ -125,28 +103,22 @@ function initResumeModalHandlers(): void {
     const resumePasscodeForm = document.getElementById('resume-passcode-form') as HTMLFormElement | null;
     const resumePasscodeInput = document.getElementById('resume-passcode-input') as HTMLInputElement | null;
     const passcodeFeedback = document.getElementById('passcode-feedback');
-
     if (btnOpenResumeModal) {
         btnOpenResumeModal.addEventListener('click', openResumeModal);
     }
-
     if (resumeModalCloseBtn) {
         resumeModalCloseBtn.addEventListener('click', closeResumeModal);
     }
-
     if (resumeModalBackdrop) {
         resumeModalBackdrop.addEventListener('click', (e: MouseEvent) => {
             if (e.target === resumeModalBackdrop) closeResumeModal();
         });
     }
-
-    // Handle Passcode Unlock (Instant access for owner / pre-approved recruiters)
     if (resumePasscodeForm && resumePasscodeInput) {
         resumePasscodeForm.addEventListener('submit', async (e: Event) => {
             e.preventDefault();
             const val = resumePasscodeInput.value.trim();
             const hash = await computeSha256(val);
-
             if (VALID_HASHES.includes(hash) || PUBLIC_TOKENS.includes(val.toUpperCase())) {
                 sessionStorage.setItem('resume_authorized', 'true');
                 if (passcodeFeedback) {
@@ -167,19 +139,14 @@ function initResumeModalHandlers(): void {
             }
         });
     }
-
-    // Handle Access Request Submission
     if (resumeRequestForm) {
         resumeRequestForm.addEventListener('submit', async (e: Event) => {
             e.preventDefault();
-
             const nameEl = document.getElementById('resume-req-name') as HTMLInputElement | null;
             const emailEl = document.getElementById('resume-req-email') as HTMLInputElement | null;
             const orgEl = document.getElementById('resume-req-org') as HTMLInputElement | null;
             const purposeEl = document.getElementById('resume-req-purpose') as HTMLInputElement | null;
-
             if (!nameEl || !emailEl) return;
-
             const reqPayload: ResumeRequestPayload = {
                 id: 'req_' + Date.now(),
                 name: nameEl.value.trim(),
@@ -189,22 +156,18 @@ function initResumeModalHandlers(): void {
                 status: 'PENDING_APPROVAL',
                 timestamp: Date.now()
             };
-
             if (!reqPayload.name || !reqPayload.email) return;
-
             if (btnSubmitResumeReq) {
                 btnSubmitResumeReq.disabled = true;
                 btnSubmitResumeReq.innerHTML = '<span>Transmitting Request...</span>';
             }
             playBotChirp(580, 'sine', 0.1);
-
             try {
                 await fetch('/api/resume-request', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(reqPayload)
                 });
-
                 if (resumeReqFeedback) {
                     resumeReqFeedback.style.display = 'block';
                     resumeReqFeedback.className = 'form-feedback-alert';
@@ -234,8 +197,6 @@ function initResumeModalHandlers(): void {
         });
     }
 }
-
-// 3. Owner Approval Dashboard Controller
 function initAdminDashboard(): void {
     const btnOpenAdmin = document.getElementById('btn-open-admin');
     const adminBackdrop = document.getElementById('admin-modal-backdrop');
@@ -252,24 +213,20 @@ function initAdminDashboard(): void {
     const tabMsgsBtn = document.getElementById('btn-tab-admin-msgs');
     const paneReqs = document.getElementById('admin-pane-reqs');
     const paneMsgs = document.getElementById('admin-pane-msgs');
-
     function openAdmin(): void {
         if (!adminBackdrop) return;
         adminBackdrop.classList.add('open');
         playBotChirp(540, 'sine', 0.1);
-
         if (sessionStorage.getItem('owner_logged_in') === 'true') {
             showDashboard();
         } else {
             showAuth();
         }
     }
-
     function closeAdmin(): void {
         if (adminBackdrop) adminBackdrop.classList.remove('open');
         playBotChirp(380, 'sine', 0.08);
     }
-
     if (btnOpenAdmin) btnOpenAdmin.addEventListener('click', openAdmin);
     if (adminCloseBtn) adminCloseBtn.addEventListener('click', closeAdmin);
     if (adminBackdrop) {
@@ -277,25 +234,21 @@ function initAdminDashboard(): void {
             if (e.target === adminBackdrop) closeAdmin();
         });
     }
-
     function showAuth(): void {
         if (authView) authView.style.display = 'block';
         if (dashView) dashView.style.display = 'none';
         if (passcodeInput) setTimeout(() => passcodeInput.focus(), 150);
     }
-
     function showDashboard(): void {
         if (authView) authView.style.display = 'none';
         if (dashView) dashView.style.display = 'block';
         void loadAdminData();
     }
-
     if (passcodeForm && passcodeInput) {
         passcodeForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const val = passcodeInput.value.trim();
             const hash = await computeSha256(val);
-
             if (VALID_HASHES.includes(hash) || PUBLIC_TOKENS.includes(val.toUpperCase())) {
                 sessionStorage.setItem('owner_logged_in', 'true');
                 sessionStorage.setItem('owner_auth_hash', hash);
@@ -312,7 +265,6 @@ function initAdminDashboard(): void {
             }
         });
     }
-
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
             sessionStorage.removeItem('owner_logged_in');
@@ -320,8 +272,6 @@ function initAdminDashboard(): void {
             showAuth();
         });
     }
-
-    // Tab switching
     if (tabReqsBtn && tabMsgsBtn && paneReqs && paneMsgs) {
         tabReqsBtn.addEventListener('click', () => {
             tabReqsBtn.classList.add('active');
@@ -329,7 +279,6 @@ function initAdminDashboard(): void {
             paneReqs.style.display = 'block';
             paneMsgs.style.display = 'none';
         });
-
         tabMsgsBtn.addEventListener('click', () => {
             tabMsgsBtn.classList.add('active');
             tabReqsBtn.classList.remove('active');
@@ -337,11 +286,9 @@ function initAdminDashboard(): void {
             paneReqs.style.display = 'none';
         });
     }
-
     async function loadAdminData(): Promise<void> {
         let resumeRequests: ResumeRequestPayload[] = [];
         let contacts: ContactPayload[] = [];
-
         try {
             const authHash = sessionStorage.getItem('owner_auth_hash') || VALID_HASHES[0];
             const res = await fetch('/api/admin/data', {
@@ -353,24 +300,19 @@ function initAdminDashboard(): void {
                 contacts = data.contacts || [];
             }
         } catch {
-            // Fallback: load from local storage backup
             resumeRequests = getLocalBackups<ResumeRequestPayload>('resume_req');
             contacts = getLocalBackups<ContactPayload>('contact');
         }
-
         renderResumeRequests(resumeRequests);
         renderContactMessages(contacts);
     }
-
     function renderResumeRequests(requests: ResumeRequestPayload[]): void {
         if (!reqListEl) return;
         if (!requests || requests.length === 0) {
             reqListEl.innerHTML = `<div class="admin-empty-state">No pending resume requests at this time.</div>`;
             return;
         }
-
         const approvalUrl = new URL('assets/resume.html?token=ACCESS-GRANTED', window.location.href).href;
-
         reqListEl.innerHTML = requests.map(req => {
             const isApproved = req.status === 'APPROVED';
             const dateStr = req.timestamp ? new Date(req.timestamp).toLocaleDateString() : 'Recent';
@@ -401,8 +343,6 @@ function initAdminDashboard(): void {
                 </div>
             `;
         }).join('');
-
-        // Wire copy button
         reqListEl.querySelectorAll<HTMLButtonElement>('.btn-approve-copy').forEach(btn => {
             btn.addEventListener('click', async () => {
                 try {
@@ -412,8 +352,6 @@ function initAdminDashboard(): void {
                     setTimeout(() => {
                         btn.innerHTML = '<span>📋 Approve &amp; Copy Access Link</span>';
                     }, 2200);
-
-                    // Call backend approval endpoint
                     const reqId = btn.getAttribute('data-id');
                     if (reqId) {
                         const authHash = sessionStorage.getItem('owner_auth_hash') || VALID_HASHES[0];
@@ -429,14 +367,12 @@ function initAdminDashboard(): void {
             });
         });
     }
-
     function renderContactMessages(messages: ContactPayload[]): void {
         if (!contactListEl) return;
         if (!messages || messages.length === 0) {
             contactListEl.innerHTML = `<div class="admin-empty-state">No contact messages received yet.</div>`;
             return;
         }
-
         contactListEl.innerHTML = messages.map(msg => {
             const dateStr = msg.timestamp ? new Date(msg.timestamp).toLocaleString() : 'Recent';
             return `
@@ -459,8 +395,6 @@ function initAdminDashboard(): void {
         }).join('');
     }
 }
-
-// Local Storage Fallback for Static GitHub Pages Hosting
 function saveLocalBackup(type: 'contact' | 'resume_req', item: unknown): void {
     try {
         const key = `dhigveer_backup_${type}`;
@@ -469,7 +403,6 @@ function saveLocalBackup(type: 'contact' | 'resume_req', item: unknown): void {
         localStorage.setItem(key, JSON.stringify(existing.slice(0, 50)));
     } catch {}
 }
-
 function getLocalBackups<T>(type: 'contact' | 'resume_req'): T[] {
     try {
         const key = `dhigveer_backup_${type}`;
@@ -478,7 +411,6 @@ function getLocalBackups<T>(type: 'contact' | 'resume_req'): T[] {
         return [];
     }
 }
-
 function escapeHtml(str: string): string {
     const div = document.createElement('div');
     div.textContent = str;

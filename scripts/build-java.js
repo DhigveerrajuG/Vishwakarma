@@ -1,10 +1,8 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-
 const jdkPath = 'C:\\Program Files\\Java\\jdk-26.0.2.1\\bin\\javac.exe';
 const javac = fs.existsSync(jdkPath) ? `"${jdkPath}"` : 'javac';
-
 try {
     if (!fs.existsSync('backend-java/bin')) {
         fs.mkdirSync('backend-java/bin', { recursive: true });

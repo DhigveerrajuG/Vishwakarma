@@ -1,22 +1,13 @@
-/**
- * Theme Manager: Light Default + Dark Mode Switcher
- */
-
 import { playBotChirp } from './audio';
-
 const THEME_KEY = 'dhigveer_portfolio_theme';
-
 export function initTheme(): void {
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const savedTheme = localStorage.getItem(THEME_KEY);
-
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
     } else if (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // Honor system preference if not set
         document.body.classList.add('dark-mode');
     }
-
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
