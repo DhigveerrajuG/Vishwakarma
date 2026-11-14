@@ -91,9 +91,7 @@ const server = http.createServer(async (req, res) => {
     const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
     const pathname = parsedUrl.pathname;
 
-    // -------------------------------------------------------------------------
     // API: Health Check
-    // -------------------------------------------------------------------------
     if (pathname === '/api/health') {
         sendJson(res, 200, {
             status: 'UP',
@@ -105,9 +103,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // API: Contact Form Submission
-    // -------------------------------------------------------------------------
     if (pathname === '/api/contact' && req.method === 'POST') {
         try {
             const body = await readBody(req);
@@ -138,9 +134,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // API: Resume Access Request Submission
-    // -------------------------------------------------------------------------
     if (pathname === '/api/resume-request' && req.method === 'POST') {
         try {
             const body = await readBody(req);
@@ -193,9 +187,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // API: Admin Dashboard Data (Owner Access)
-    // -------------------------------------------------------------------------
     if (pathname === '/api/admin/data' && (req.method === 'GET' || req.method === 'POST')) {
         const authHeader = req.headers['x-admin-passcode'] || req.headers['authorization'];
         let passcode = (authHeader || '').replace('Bearer ', '').trim();
@@ -238,9 +230,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // API: Admin Approve Resume Request
-    // -------------------------------------------------------------------------
     if (pathname === '/api/admin/approve' && req.method === 'POST') {
         const authHeader = req.headers['x-admin-passcode'] || req.headers['authorization'];
         let passcode = (authHeader || '').replace('Bearer ', '').trim();
@@ -291,9 +281,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // API: RoboGuide AI Copilot Chat
-    // -------------------------------------------------------------------------
     if (pathname === '/api/chat' && req.method === 'POST') {
         try {
             const body = await readBody(req);
@@ -388,9 +376,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // API: Dynamic Projects Data
-    // -------------------------------------------------------------------------
     if (pathname === '/api/projects') {
         sendJson(res, 200, {
             status: 'success',
@@ -404,9 +390,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // -------------------------------------------------------------------------
     // Static File Serving
-    // -------------------------------------------------------------------------
     let filePath = path.join(ROOT_DIR, pathname === '/' ? 'index.html' : pathname);
 
     // Guard against directory traversal

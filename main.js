@@ -1,13 +1,9 @@
-/* ==========================================================================
-   Dhigveerraju G - Modern Robotics & AI Engineering Portfolio
-   Main JavaScript Engine: Theme, Conversational RoboGuide Companion, & Projects
-   ========================================================================== */
+// Dhigveerraju G - Modern Robotics & AI Engineering Portfolio
+// Main JavaScript Engine: Theme, Conversational RoboGuide Companion, & Projects
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    /* ----------------------------------------------------------------------
-       1. Theme Toggle (Light Default + Dark Mode Switcher)
-       ---------------------------------------------------------------------- */
+    // 1. Theme Toggle
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const THEME_KEY = 'dhigveer_portfolio_theme';
 
@@ -26,9 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ----------------------------------------------------------------------
-       2. Web Audio API Robot Sound Synthesizer (Cute electronic beeps)
-       ---------------------------------------------------------------------- */
+    // 2. Web Audio API Robot Sound Synthesizer
     let audioCtx = null;
     let isMuted = false;
 
@@ -66,9 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* ----------------------------------------------------------------------
-       3. Typewriter Effect
-       ---------------------------------------------------------------------- */
+    // 3. Typewriter Effect
     const typewriterEl = document.getElementById('hero-typewriter');
     const roles = [
         "Robotics & Artificial Intelligence Engineer",
@@ -108,9 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     runTypewriter();
 
-    /* ----------------------------------------------------------------------
-       4. Mobile Navigation Menu Toggle
-       ---------------------------------------------------------------------- */
+    // 4. Mobile Navigation Menu Toggle
     const mobileNavToggle = document.getElementById('mobile-nav-toggle');
     const navLinksList = document.getElementById('nav-links');
 
@@ -126,9 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ----------------------------------------------------------------------
-       5. Projects Filtering
-       ---------------------------------------------------------------------- */
+    // 5. Projects Filtering
     const filterBtns = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
@@ -151,9 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* ----------------------------------------------------------------------
-       6. Project Architecture Details Modal (Tabs, Code Snippets & Specs)
-       ---------------------------------------------------------------------- */
+    // 6. Project Architecture Details Modal (Tabs, Code Snippets & Specs)
     const modalBackdrop = document.getElementById('project-modal-backdrop');
     const modalContentArea = document.getElementById('modal-content-area');
     const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -511,11 +497,7 @@ void loop() {
         });
     }
 
-    /* ----------------------------------------------------------------------
-       7. THE MINI ROBOT COMPANION ("RoboGuide" Stationary Corner Companion)
-          - Greets on page open and auto-minimizes after 3.8 seconds
-          - Interactive AI Chat Box, Web Speech Synthesis Voice Option, & 30s Guided Tour
-       ---------------------------------------------------------------------- */
+    // 7. RoboGuide Stationary Companion & 30s Guided Tour
     const botGreetingToast = document.getElementById('bot-greeting-toast');
     const botChatCard = document.getElementById('bot-chat-card');
     const botChatClose = document.getElementById('bot-chat-close');
@@ -942,9 +924,7 @@ void loop() {
         });
     });
 
-    /* ----------------------------------------------------------------------
-       9. Live GitHub API Data Sync & Cache
-       ---------------------------------------------------------------------- */
+    // 8. Live GitHub API Data Sync & Cache
     const GITHUB_USERNAME = 'DhigveerrajuG';
     const CACHE_KEY = 'dhigveer_github_sync_v3';
     const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hr cache
@@ -990,9 +970,7 @@ void loop() {
     }
     syncGitHubData();
 
-    /* ----------------------------------------------------------------------
-       10. Contact Form Submission (Connected Backend Integration)
-       ---------------------------------------------------------------------- */
+    // 9. Contact Form Submission
     const contactForm = document.getElementById('contact-form');
     const formFeedback = document.getElementById('form-feedback');
     const btnSubmitForm = document.getElementById('btn-submit-form');
@@ -1047,9 +1025,7 @@ void loop() {
         });
     }
 
-    /* ----------------------------------------------------------------------
-       10b. Resume Access Request & Passcode Authorization Modal
-       ---------------------------------------------------------------------- */
+    // 10. Resume Access Request & Passcode Authorization Modal
     const btnOpenResumeModal = document.getElementById('btn-open-resume-modal');
     const resumeModalBackdrop = document.getElementById('resume-modal-backdrop');
     const resumeModalCloseBtn = document.getElementById('resume-modal-close-btn');
@@ -1195,9 +1171,7 @@ void loop() {
         });
     }
 
-    /* ----------------------------------------------------------------------
-       10c. Reactive RoboGuide Drone Micro-Interactions
-       ---------------------------------------------------------------------- */
+    // 11. Reactive RoboGuide Drone Micro-Interactions
     const botChassis = botDroneChassis || document.getElementById('bot-drone-chassis');
     const antennaBeacon = document.getElementById('bot-antenna-beacon');
 
@@ -1261,9 +1235,7 @@ void loop() {
         skillsSection.addEventListener('mouseleave', () => setBotReaction('normal'));
     }
 
-    /* ----------------------------------------------------------------------
-       10d. Owner Approval Dashboard Controller (/admin)
-       ---------------------------------------------------------------------- */
+    // 12. Owner Approval Dashboard Controller (/admin)
     const btnOpenAdmin = document.getElementById('btn-open-admin');
     const adminBackdrop = document.getElementById('admin-modal-backdrop');
     const adminCloseBtn = document.getElementById('admin-modal-close-btn');
@@ -1507,9 +1479,7 @@ void loop() {
         }
     }
 
-    /* ----------------------------------------------------------------------
-       11. Scroll Reveal Animations & Navigation Scroll Spy
-       ---------------------------------------------------------------------- */
+    // 13. Scroll Reveal Animations & Navigation Scroll Spy
     const revealTargets = document.querySelectorAll(
         '.section-header, .about-profile-card, .skills-column-card, .project-card, .metric-item, .contact-card-info, .contact-form-wrapper'
     );

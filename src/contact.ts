@@ -235,9 +235,7 @@ function initResumeModalHandlers(): void {
     }
 }
 
-// -----------------------------------------------------------------------------
 // 3. Owner Approval Dashboard Controller
-// -----------------------------------------------------------------------------
 function initAdminDashboard(): void {
     const btnOpenAdmin = document.getElementById('btn-open-admin');
     const adminBackdrop = document.getElementById('admin-modal-backdrop');

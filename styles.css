@@ -1,11 +1,6 @@
-/* ==========================================================================
-   Dhigveerraju G - Modern Robotics & AI Engineering Portfolio
-   Theme: Clean, Modern Tech Website (Light Theme Default + Dark Mode Switcher)
-   ========================================================================== */
+/* Dhigveerraju G - Modern Robotics & AI Engineering Portfolio */
 
-/* --------------------------------------------------------------------------
-   1. CSS Variables & Design Tokens (Modern Light & Dark Modes)
-   -------------------------------------------------------------------------- */
+/* 1. CSS Variables & Design Tokens */
 :root {
     /* Color Palette - Modern Clean Light Theme (Default) */
     --bg-page: #f8fafc;
@@ -74,9 +69,7 @@
     --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* --------------------------------------------------------------------------
-   2. Dark Theme Variables (Toggleable via .dark-mode on <body>)
-   -------------------------------------------------------------------------- */
+/* 2. Dark Theme Variables */
 body.dark-mode {
     --bg-page: #0a0e17;
     --bg-page-alt: #0f1523;
@@ -124,9 +117,7 @@ body.dark-mode {
     --shadow-primary: 0 10px 30px rgba(59, 130, 246, 0.3);
 }
 
-/* --------------------------------------------------------------------------
-   3. Global Reset & Base Typography
-   -------------------------------------------------------------------------- */
+/* 3. Global Reset & Base Typography */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -244,9 +235,7 @@ a:hover {
     display: inline-block;
 }
 
-/* --------------------------------------------------------------------------
-   4. Buttons & Interactive Controls
-   -------------------------------------------------------------------------- */
+/* 4. Buttons & Interactive Controls */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -337,9 +326,7 @@ a:hover {
     transform: translateY(-1px);
 }
 
-/* --------------------------------------------------------------------------
-   5. Modern Website Header & Navigation
-   -------------------------------------------------------------------------- */
+/* 5. Modern Website Header & Navigation */
 .site-header {
     position: sticky;
     top: 0;
@@ -539,9 +526,7 @@ body:not(.dark-mode) .theme-icon-dark {
     transition: all var(--transition-fast);
 }
 
-/* --------------------------------------------------------------------------
-   6. Hero Section (Clean, Centered, High-Impact Modern Website)
-   -------------------------------------------------------------------------- */
+/* 6. Hero Section */
 .hero-section {
     padding: 84px 0 96px 0;
     position: relative;
@@ -648,9 +633,7 @@ body:not(.dark-mode) .theme-icon-dark {
     font-weight: 500;
 }
 
-/* --------------------------------------------------------------------------
-   7. Hero Interactive Robotics & AI Telemetry Console (Right Column)
-   -------------------------------------------------------------------------- */
+/* 7. Hero Interactive Robotics & AI Telemetry Console */
 .telemetry-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
@@ -884,9 +867,7 @@ body:not(.dark-mode) .theme-icon-dark {
     border-color: var(--primary);
 }
 
-/* --------------------------------------------------------------------------
-   8. Standard Section Structure & Headers
-   -------------------------------------------------------------------------- */
+/* 8. Standard Section Structure & Headers */
 .section {
     padding: 88px 0;
     position: relative;
@@ -937,9 +918,7 @@ body:not(.dark-mode) .theme-icon-dark {
     line-height: 1.65;
 }
 
-/* --------------------------------------------------------------------------
-   9. About Section & Philosophy
-   -------------------------------------------------------------------------- */
+/* 9. About Section & Philosophy */
 .about-grid {
     display: flex;
     justify-content: center;
@@ -1083,9 +1062,7 @@ body:not(.dark-mode) .theme-icon-dark {
     border: 1px solid var(--border-color);
 }
 
-/* --------------------------------------------------------------------------
-   10. Featured Engineering Projects Section
-   -------------------------------------------------------------------------- */
+/* 10. Featured Engineering Projects Section */
 .projects-filter-bar {
     display: flex;
     align-items: center;
@@ -1329,9 +1306,7 @@ body:not(.dark-mode) .theme-icon-dark {
     flex-shrink: 0;
 }
 
-/* --------------------------------------------------------------------------
-   11. Technical Skills Matrix Section
-   -------------------------------------------------------------------------- */
+/* 11. Technical Skills Matrix Section */
 .skills-matrix-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1421,9 +1396,7 @@ body:not(.dark-mode) .theme-icon-dark {
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --------------------------------------------------------------------------
-   12. Interactive Bot Lab / Diagnostic Station
-   -------------------------------------------------------------------------- */
+/* 12. Interactive Bot Lab / Diagnostic Station */
 .bot-lab-container {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
@@ -1523,9 +1496,7 @@ body.dark-mode .bot-avatar-display {
     color: #38bdf8;
 }
 
-/* --------------------------------------------------------------------------
-   13. Contact & Collaboration Section
-   -------------------------------------------------------------------------- */
+/* 13. Contact & Collaboration Section */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1.1fr;
@@ -1715,9 +1686,7 @@ body.dark-mode .bot-avatar-display {
     color: var(--accent-emerald);
 }
 
-/* --------------------------------------------------------------------------
-   14. Modern Website Footer
-   -------------------------------------------------------------------------- */
+/* 14. Modern Website Footer */
 .site-footer {
     background: var(--bg-surface);
     border-top: 1px solid var(--border-color);
@@ -1745,9 +1714,7 @@ body.dark-mode .bot-avatar-display {
     gap: 16px;
 }
 
-/* --------------------------------------------------------------------------
-   15. THE MINI ROBOT COMPANION ("RoboGuide" Stationary Corner Companion)
-   -------------------------------------------------------------------------- */
+/* 15. RoboGuide Stationary Corner Companion */
 .mini-bot-container {
     position: fixed;
     bottom: 24px;
@@ -2181,9 +2148,7 @@ body.dark-mode .bot-ground-shadow {
     100% { transform: scale(1); opacity: 0.6; }
 }
 
-/* --------------------------------------------------------------------------
-   16. Project Architecture Details Modal
-   -------------------------------------------------------------------------- */
+/* 16. Project Architecture Details Modal */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -2333,9 +2298,7 @@ body.dark-mode .bot-ground-shadow {
     color: var(--accent-emerald);
 }
 
-/* --------------------------------------------------------------------------
-   17. Responsive Design (Mobile, Tablet, Desktop)
-   -------------------------------------------------------------------------- */
+/* 17. Responsive Design (Mobile, Tablet, Desktop) */
 @media (max-width: 1024px) {
     .hero-grid {
         grid-template-columns: 1fr;
@@ -2408,9 +2371,7 @@ body.dark-mode .bot-ground-shadow {
     }
 }
 
-/* --------------------------------------------------------------------------
-   17. Scroll Reveal & Visual Interaction Enhancements
-   -------------------------------------------------------------------------- */
+/* 18. Scroll Reveal & Visual Interaction Enhancements */
 .reveal-on-scroll {
     opacity: 0;
     transform: translateY(22px);
@@ -2440,9 +2401,7 @@ body.dark-mode .bot-ground-shadow {
     border-radius: var(--radius-full);
 }
 
-/* --------------------------------------------------------------------------
-   18. Project Modal Interactive Tabs & Code Snippet Box
-   -------------------------------------------------------------------------- */
+/* 19. Project Modal Interactive Tabs & Code Snippet Box */
 .project-modal-tabs {
     display: flex;
     gap: 8px;
@@ -2553,9 +2512,7 @@ body.dark-mode .bot-ground-shadow {
     font-size: 0.82rem;
 }
 
-/* --------------------------------------------------------------------------
-   19. Owner Admin Approval Dashboard (/admin)
-   -------------------------------------------------------------------------- */
+/* 20. Owner Admin Approval Dashboard (/admin) */
 .btn-owner-portal {
     background: transparent;
     border: 1px dashed var(--border-color);
@@ -2744,9 +2701,7 @@ body.dark-mode .bot-ground-shadow {
     color: var(--text-muted);
 }
 
-/* --------------------------------------------------------------------------
-   20. Reactive RoboGuide Drone Micro-Interactions
-   -------------------------------------------------------------------------- */
+/* 21. Reactive RoboGuide Drone Micro-Interactions */
 #bot-drone-chassis.state-scanning #bot-antenna-beacon {
     animation: beaconRapidPulse 0.4s infinite alternate;
 }

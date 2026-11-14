@@ -130,9 +130,7 @@ public class PortfolioServer {
         return "";
     }
 
-    // -------------------------------------------------------------------------
     // Health Check Handler
-    // -------------------------------------------------------------------------
     static class HealthHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -147,9 +145,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Contact Form Handler
-    // -------------------------------------------------------------------------
     static class ContactHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -199,9 +195,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Resume Access Request Handler
-    // -------------------------------------------------------------------------
     static class ResumeRequestHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -253,9 +247,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Admin Dashboard Data Handler (Owner Access)
-    // -------------------------------------------------------------------------
     static class AdminDataHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -309,9 +301,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Admin Approve Resume Request Handler
-    // -------------------------------------------------------------------------
     static class AdminApproveHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -378,9 +368,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // RoboGuide AI Copilot Chat Handler
-    // -------------------------------------------------------------------------
     static class ChatHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -486,9 +474,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Projects Data Handler
-    // -------------------------------------------------------------------------
     static class ProjectsHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -512,9 +498,7 @@ public class PortfolioServer {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Static File Serving Handler
-    // -------------------------------------------------------------------------
     static class StaticFileHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
